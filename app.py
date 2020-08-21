@@ -57,7 +57,7 @@ def train_model(df):
 
 @st.cache
 def load_data():
-    return pd.read_csv('https://drive.google.com/file/d/1-CaEiU1u-S4f_7vpEBGg7xpfXexK2nZ2/')
+    return pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data', names=['alcohol', 'malic_acid', 'ash', 'alcalinity_of_ash', 'magnesium', 'total_phenols','flavanoids', 'nonflavanoid_phenols' ,'proanthocyanins', 'color_intensity', 'hue', 'OD280/OD315_of_diluted_wines', 'proline'], delimiter=",", index_col=False)
 
 
 if __name__ == '__main__':
