@@ -48,7 +48,7 @@ def main():
 
 @st.cache
 def load_data():
-	train= pd.read_csv("https://iyanu2.blob.core.windows.net/unzipped/rossmann-store-sales/train.csv")
+	train= pd.read_csv("https://iyanu2.blob.core.windows.net/unzipped/rossmann-store-sales/train.csv", low_memory=False)
 	test= pd.read_csv("https://iyanu2.blob.core.windows.net/unzipped/rossmann-store-sales/test.csv")
 	store= pd.read_csv("https://iyanu2.blob.core.windows.net/unzipped/rossmann-store-sales/store.csv")
 	return train, test, store
