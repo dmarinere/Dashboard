@@ -10,6 +10,4 @@ echo "\
 headless = true\n\
 enableCORS=false\n\
 port = $PORT\n\
-[browser]
-serverAddress = "https://dashboard-emma.herokuapp.com/" 
 " > ~/.streamlit/config.toml
