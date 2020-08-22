@@ -5,60 +5,56 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.ensemble import RandomForestClassifier
+
 from sklearn.model_selection import train_test_split
 
 
 def main():
 
-    df = load_data()
+    train, test, store = load_data()
 
     page = st.sidebar.selectbox("Choose a page", ['Homepage', 'Exploration', 'Prediction'])
 
+	
     if page == 'Homepage':
-        st.title('Wine Alcohol Class Prediction')
+			 	st.title('A brief Data Description  ⓿ ➀ ➁ ➂ 🔢 ')
+        st.write("""This data would show the people who used our service in different stores, we would sample some rows to show 
+				what the data is about but basically we have data that shows""")
+        train = pd.merge(train, store, on='Store')
+				test = pd.merge(test, store, on='Store')
+        st.dataframe(train.sample(20))
         st.text('Select a page in the sidebar')
-        st.dataframe(df)
+				
+				
     elif page == 'Exploration':
-        st.title('Explore the Wine Data-set')
+        st.title('Explore Rossman Data-set')
         if st.checkbox('Show column descriptions'):
-            st.dataframe(df.describe())
+            st.dataframe(train.describe())
         
-        st.markdown('### Analysing column relations')
-        st.text('Correlations:')
-        fig, ax = plt.subplots(figsize=(10,10))
-        sns.heatmap(df.corr(), annot=True, ax=ax)
-        st.pyplot()
-        st.text('Effect of the different classes')
-        sns.pairplot(df, vars=['magnesium', 'flavanoids', 'nonflavanoid_phenols', 'proline'], hue='alcohol')
-        st.pyplot()
+       
+				
     else:
         st.title('Modelling')
-        model, accuracy = train_model(df)
-        st.write('Accuracy: ' + str(accuracy))
         st.markdown('### Make prediction')
+				df = pd.read_csv("https://iyanu2.blob.core.windows.net/unzipped/prediction.csv")
         st.dataframe(df)
-        row_number = st.number_input('Select row', min_value=0, max_value=len(df)-1, value=0)
-        st.markdown('#### Predicted')
-        st.text(model.predict(df.drop(['alcohol'], axis=1).loc[row_number].values.reshape(1, -1))[0])
+        row_number = st.number_input('Select Store', min_value=1, max_value=len(df['Store'].nunique()-1), value=0)
+				sub = df[df['Store']==row_number]
+				start_date = st.sidebar.date_input('start date', datetime.date(2015,8,1))
+        end_date = st.sidebar.date_input('end date', datetime.date(2015,9,20))
+        days = (sub['Date'] > start_date) & (sub['Date'] <= end_date)
+        st.markdown('#### Predicted Sales')
+				dis = sub.loc[days]
+				st.write(dis)
 
 
-@st.cache
-def train_model(df):
-    X = np.array(df.drop(['alcohol'], axis=1))
-    y= np.array(df['alcohol'])
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    model = RandomForestClassifier()
-    model.fit(X_train, y_train)
-
-    return model, model.score(X_test, y_test)
 
 @st.cache
 def load_data():
-    return pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data', names=['alcohol', 'malic_acid', 'ash', 'alcalinity_of_ash', 'magnesium', 'total_phenols','flavanoids', 'nonflavanoid_phenols' ,'proanthocyanins', 'color_intensity', 'hue', 'OD280/OD315_of_diluted_wines', 'proline'], delimiter=",", index_col=False)
-
+    train= pd.read_csv("https://iyanu2.blob.core.windows.net/unzipped/rossmann-store-sales/train.csv"),
+		test= pd.read_csv("https://iyanu2.blob.core.windows.net/unzipped/rossmann-store-sales/test.csv"), 
+		store= pd.read_csv("https://iyanu2.blob.core.windows.net/unzipped/rossmann-store-sales/store.csv")
+		return train, test, store
 
 if __name__ == '__main__':
     main()
