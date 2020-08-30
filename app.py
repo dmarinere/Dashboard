@@ -12,7 +12,7 @@ def main():
     test = pd.merge(test, store, on='Store')
 
     page = st.sidebar.selectbox(
-        "Choose a page", ['Homepage', 'Exploration', 'Prediction'])
+        "Choose a page", ['Homepage', 'Exploration', 'Prediction', 'User'])
 
     if page == 'Homepage':
         st.title('A brief Data Description')
@@ -23,6 +23,9 @@ def main():
         st.title('Explore Rossmann Data-set')
         if st.checkbox('Show column descriptions'):
             st.dataframe(test.describe())
+            
+    elif page== 'User':
+        st.title('This is a User called Bikal my good friend from world Quant University who stays is NEPAL')
 
     else:
         st.title('Modelling')
